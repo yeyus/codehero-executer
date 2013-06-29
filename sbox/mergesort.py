@@ -19,12 +19,18 @@ def mergeSort(toSort):
         result.extend(mergeSort(left))
     else:
         result.extend(mergeSort(right))
-     
+
     return result
 
 def main():
-    input = [9,8,7,6,5,4,3,2,0,1]
-    print mergeSort(input)
+    
+    # input is injected by the sandbox caller
+    # Array copy to avoid the usage of a readonly object
+    i = []
+    for row in inpt:
+        i.append(row)
+
+    print mergeSort(i)
 
 if __name__ == "__main__":
     main()

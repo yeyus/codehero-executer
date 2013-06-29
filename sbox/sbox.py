@@ -26,10 +26,10 @@ class Runner:
         SandboxConfig.createOptparseOptions(parser)#, default_timeout=None)
         parser.add_option("--debug",
             help="Debug mode",
-            action="store_true", default=True)
+            action="store_true", default=False)
         parser.add_option("--verbose", "-v",
             help="Verbose mode",
-            action="store_true", default=True)
+            action="store_true", default=False)
         parser.add_option("--quiet", "-q",
             help="Quiet mode",
             action="store_true", default=False)
@@ -49,6 +49,7 @@ class Runner:
         config.enable('stderr')
         config.enable('exit')
         config.enable('site')
+        config.enable('random')
         config.enable('encodings')
         config._builtins_whitelist.add('compile')
         config.allowModuleSourceCode('code')
@@ -62,7 +63,7 @@ class Runner:
         if not config.cpython_restricted:
             config.allowPath(__file__)
         return config
-    def Run(self,code):
+    def Run(self,code,locals=None):
         # code = '\n'.join([self.code,code])
         # log and compile the statement up front
         val = ''
@@ -74,7 +75,7 @@ class Runner:
             return
         try:
             with capture_stdout() as stdout:
-                self.sandbox.execute(code)
+                self.sandbox.execute(code, locals)
                 stdout.seek(0)
                 val = stdout.read()
         except:
